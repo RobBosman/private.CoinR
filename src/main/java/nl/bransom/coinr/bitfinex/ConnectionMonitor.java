@@ -2,20 +2,27 @@ package nl.bransom.coinr.bitfinex;
 
 import io.vertx.core.Future;
 import io.vertx.rxjava.core.AbstractVerticle;
+import io.vertx.rxjava.core.http.HttpServerRequest;
 
 public class ConnectionMonitor extends AbstractVerticle {
 
   @Override
-  public void start(final Future<Void> fut) {
+  public void start(final Future<Void> futureResult) {
     vertx
         .createHttpServer()
-        .requestHandler(r -> r.response().end("<h1>Hello from the ConnectionMonitor</h1>"))
+        .requestHandler(this::respond)
         .listen(8080, result -> {
           if (result.succeeded()) {
-            fut.complete();
+            futureResult.complete();
           } else {
-            fut.fail(result.cause());
+            futureResult.fail(result.cause());
           }
         });
+  }
+
+  private void respond(final HttpServerRequest request) {
+    request
+        .response()
+        .end("<h1>Hello from the ConnectionMonitor</h1>");
   }
 }

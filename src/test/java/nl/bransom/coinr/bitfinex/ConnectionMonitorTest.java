@@ -15,18 +15,18 @@ public class ConnectionMonitorTest {
   private Vertx vertx;
 
   @Before
-  public void setUp(TestContext context) {
+  public void setUp(final TestContext context) {
     vertx = Vertx.vertx();
     vertx.deployVerticle(ConnectionMonitor.class.getName(), context.asyncAssertSuccess());
   }
 
   @After
-  public void tearDown(TestContext context) {
+  public void tearDown(final TestContext context) {
     vertx.close(context.asyncAssertSuccess());
   }
 
   @Test
-  public void testMyApplication(TestContext context) {
+  public void testMyApplication(final TestContext context) {
     final Async async = context.async();
     vertx.createHttpClient().
         getNow(8080, "localhost", "/",
