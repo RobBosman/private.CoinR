@@ -2,37 +2,33 @@ package nl.bransom.coinr.bitfinex;
 
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.Async;
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import io.vertx.ext.unit.TestSuite;
+import org.junit.jupiter.api.Test;
 
-@RunWith(VertxUnitRunner.class)
-public class ConnectionMonitorTest {
-
-  private Vertx vertx;
-
-  @Before
-  public void setUp(final TestContext context) {
-    vertx = Vertx.vertx();
-    vertx.deployVerticle(ConnectionMonitor.class.getName(), context.asyncAssertSuccess());
-  }
-
-  @After
-  public void tearDown(final TestContext context) {
-    vertx.close(context.asyncAssertSuccess());
-  }
+class ConnectionMonitorTest {
 
   @Test
-  public void testMyApplication(final TestContext context) {
-    final Async async = context.async();
-    vertx.createHttpClient().
-        getNow(8080, "localhost", "/",
-            response -> response.handler(body -> {
-              context.assertTrue(body.toString().contains("Hello from the ConnectionMonitor"));
-              async.complete();
-            }));
+  void test() {
+    final Vertx vertx = Vertx.vertx();
+    TestSuite
+        .create("TestSuite")
+        .before(testContext ->
+            vertx
+                .exceptionHandler(testContext.exceptionHandler())
+                .deployVerticle(ConnectionMonitor.class.getName(), testContext.asyncAssertSuccess()))
+        .test("pingTest", testContext -> {
+          final Async async = testContext.async();
+          vertx
+              .exceptionHandler(testContext.exceptionHandler())
+              .createHttpClient()
+              .getNow(8080, "localhost", "/",
+                  response -> response.handler(body -> {
+                    testContext.assertTrue(body.toString().contains("Hello from the ConnectionMonitor"));
+                    async.complete();
+                  }));
+        })
+        .after(testContext -> vertx.close(testContext.asyncAssertSuccess()))
+        .run()
+        .awaitSuccess();
   }
 }
