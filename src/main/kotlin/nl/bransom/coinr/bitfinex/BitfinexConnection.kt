@@ -6,7 +6,7 @@ import io.vertx.reactivex.ext.web.client.WebClient
 
 object BitfinexConnection {
 
-    fun ping(vertx: Vertx) =
+    fun getStatus(vertx: Vertx) =
         WebClient
             .create(vertx)
             .requestAbs(GET, "https://api-pub.bitfinex.com/v2/platform/status")

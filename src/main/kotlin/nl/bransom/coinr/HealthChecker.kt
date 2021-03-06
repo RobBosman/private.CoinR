@@ -12,7 +12,7 @@ internal object HealthChecker {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun getHandler(vertx: Vertx, config: JsonObject): HealthCheckHandler =
+    fun getHandler(vertx: Vertx): HealthCheckHandler =
         HealthCheckHandler
             .create(vertx)
 
@@ -37,7 +37,7 @@ internal object HealthChecker {
             // Chek if MongoDB is up and running.
             .register("BitfinexConnection", 2_000) { healthStatus ->
                 BitfinexConnection
-                    .ping(vertx)
+                    .getStatus(vertx)
                     .timeout(1_000, TimeUnit.MILLISECONDS)
                     .subscribe(
                         {

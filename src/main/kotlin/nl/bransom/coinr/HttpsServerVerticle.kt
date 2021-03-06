@@ -93,7 +93,7 @@ internal class HttpsServerVerticle : AbstractVerticle() {
             )
         router
             .get("/health*")
-            .handler(HealthChecker.getHandler(vertx, config()))
+            .handler(HealthChecker.getHandler(vertx))
 //        router
 //            .mountSubRouter(
 //                "/eventbus",
