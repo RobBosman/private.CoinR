@@ -18,7 +18,7 @@
     <kotlin.version>1.4.31</kotlin.version>
     <logback.version>1.2.3</logback.version>
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-    <vertx.version>4.0.2</vertx.version>
+    <vertx.version>4.3.8</vertx.version>
   </properties>
 
   <build>
